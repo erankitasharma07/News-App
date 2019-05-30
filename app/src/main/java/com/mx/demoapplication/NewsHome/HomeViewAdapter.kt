@@ -12,7 +12,8 @@ import com.mx.demoapplication.databinding.ItemHomeViewBinding
 import com.mx.demoapplication.R
 import com.squareup.picasso.Picasso
 
-class HomeViewAdapter(private val mcontext: Context, var articleModel: List<Response.Article>) :
+class HomeViewAdapter(private val mcontext: Context,
+                      var articleModel: List<Response.Article>) :
     RecyclerView.Adapter<HomeViewAdapter.ItemViewHolder>() {
     private lateinit var binding: ItemHomeViewBinding
 
@@ -41,7 +42,7 @@ class HomeViewAdapter(private val mcontext: Context, var articleModel: List<Resp
 
             binding.itemHome.setOnClickListener {
                val intent = Intent(mcontext, NewsDetailActivity::class.java)
-                intent.putExtra("content", article.content)
+                intent.putExtra("content", article.description)
                 intent.putExtra("image", article.urlToImage)
                 intent.putExtra("publishedAt", article.publishedAt)
                 intent.putExtra("source", article.author)
