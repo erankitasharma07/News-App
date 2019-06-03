@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -12,8 +13,10 @@ import android.view.View
 import android.widget.Toast
 import com.mx.demoapplication.databinding.ActivityHomeBinding
 
-import com.mx.demoapplication.R
 import com.mx.demoapplication.ViewModel.CommonViewModel
+
+import com.mx.demoapplication.R
+import com.mx.demoapplication.utils.Constants
 
 
 class HomeActivity : AppCompatActivity(){
@@ -30,15 +33,27 @@ class HomeActivity : AppCompatActivity(){
 
         viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
         showProgressbar()
+        callObserver()
+
+        binding.swipeContainer.setOnRefreshListener {
+            Constants.isForceRefresh = true
+            callObserver()
+        }
+
+    }
+    fun callObserver(){
         viewModel.articles.observe(this, Observer { userResource ->
+
             val article = userResource?.articles
-                val adapter = HomeViewAdapter(
-                    this@HomeActivity,
-                    article!!
-                )
-                binding.recyclerView.adapter = adapter
-                Log.d("Articles", article.toString())
-                hideProgressbar()
+            val adapter = HomeViewAdapter(
+                this@HomeActivity,
+                article!!
+            )
+            binding.recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+            Log.d("Articles", article.toString())
+            binding.swipeContainer.isRefreshing = false
+            hideProgressbar()
         })
     }
     fun showToast(msg: String, context: Context){

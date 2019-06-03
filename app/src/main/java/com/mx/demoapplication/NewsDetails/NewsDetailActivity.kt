@@ -7,12 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import com.mx.demoapplication.databinding.ActivityNewsDetailsBinding
 import com.squareup.picasso.Picasso
 import java.util.*
-import android.os.Build
-import android.support.annotation.RequiresApi
 import com.mx.demoapplication.R
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class NewsDetailActivity : AppCompatActivity(){
