@@ -7,6 +7,7 @@ import com.mx.demoapplication.Data.source.Remote.WebServices
 import com.mx.demoapplication.Data.source.Local.ArticleDao
 import com.mx.demoapplication.utils.Constants
 import retrofit2.Call
+import java.util.*
 import java.util.concurrent.Executor
 
 
@@ -72,5 +73,14 @@ class DataRepository constructor(private var webservice: WebServices,
         }
         return data
     }
+
+   fun markFavorite(article: Article):LiveData<Article>{
+       val data = MutableLiveData<Article>()
+       executor.execute {
+           articleDao.addFavorite(article = article)
+           data.postValue(article)
+       }
+      return data
+   }
 
 }

@@ -23,5 +23,10 @@ interface ArticleDao {
     @Delete
     fun delete(article: Article)
 
+    @Update
+    fun addFavorite(article: Article)
+
+    @Query("SELECT * FROM Article Where pid")
+    fun getFavorite(): List<Article>
 
 }

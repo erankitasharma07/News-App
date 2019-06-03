@@ -13,9 +13,9 @@ data class ArticleModel(
     )
 
 @Entity
-    data class Article (
-    @PrimaryKey(autoGenerate = true)
-    var pid: Int,
+data class Article (
+    @PrimaryKey
+    var pid: String = UUID.randomUUID().toString(),
     var author: String?= null,
     var content: String?=null,
     var description: String="",
@@ -23,10 +23,11 @@ data class ArticleModel(
     @Embedded(prefix = "source") var source: Source= Source(),
     var title: String="",
     var url: String?=null,
-    var urlToImage: String?=null
-    )
+    var urlToImage: String?=null,
+    var isFavorite:Boolean = false
+)
 
-    data class Source(
-        var id: String?=null,
-        var name: String=""
-    )
+data class Source(
+    var id: String?=null,
+    var name: String=""
+)

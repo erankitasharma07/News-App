@@ -26,6 +26,12 @@
                       android:padding="@dimen/_5sdp"
                       android:textColor="@color/md_grey_700"
                       android:id="@+id/description"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="end"
+                       android:id="@+id/favorite"
+                       android:background="@drawable/ic_favorite_border_red_700_24dp"
+                       android:layout_margin="@dimen/_5sdp"/>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

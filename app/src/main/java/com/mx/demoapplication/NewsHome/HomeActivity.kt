@@ -11,18 +11,21 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.mx.demoapplication.Data.Article
 import com.mx.demoapplication.databinding.ActivityHomeBinding
 
 import com.mx.demoapplication.ViewModel.CommonViewModel
 
 import com.mx.demoapplication.R
 import com.mx.demoapplication.utils.Constants
+import okhttp3.internal.notifyAll
 
 
 class HomeActivity : AppCompatActivity(){
 
     lateinit var binding : ActivityHomeBinding
     lateinit var viewModel: CommonViewModel
+    lateinit var  adapter:HomeViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class HomeActivity : AppCompatActivity(){
         val linearLayoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = linearLayoutManager
 
-        viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
+//        viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
         showProgressbar()
         callObserver()
 
@@ -42,15 +45,21 @@ class HomeActivity : AppCompatActivity(){
 
     }
     fun callObserver(){
+        viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
         viewModel.articles.observe(this, Observer { userResource ->
 
             val article = userResource?.articles
-            val adapter = HomeViewAdapter(
+            adapter = HomeViewAdapter(
                 this@HomeActivity,
                 article!!
-            )
+            ) { view: View, i: Int, article: Article ->
+                article.isFavorite=true
+                viewModel.markFavorite(article)
+
+                //update recycler adapter item at position
+                 adapter.notifyItemChanged(i,article)
+            }
             binding.recyclerView.adapter = adapter
-            adapter.notifyDataSetChanged()
             Log.d("Articles", article.toString())
             binding.swipeContainer.isRefreshing = false
             hideProgressbar()
