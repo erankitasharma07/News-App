@@ -20,8 +20,11 @@ interface ArticleDao {
     @Insert
     fun insertAll(articles: List<Article>)
 
+    @Update
+    fun updateAll(articles: List<Article>)
+
     @Delete
-    fun delete(article: Article)
+    fun delete(article: List<Article>)
 
     @Update
     fun addFavorite(article: Article)

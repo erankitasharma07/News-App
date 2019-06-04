@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso
 class HomeViewAdapter(
     private var mcontext: Context,
     var articleModel: List<Article>,
-    private val listener:(View, Int, Article)->Unit
+    private val listener:(View, Int, Article, Boolean)->Unit
 ) :
     RecyclerView.Adapter<HomeViewAdapter.ItemViewHolder>() {
     private lateinit var binding: ItemHomeViewBinding
@@ -27,14 +27,9 @@ class HomeViewAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bindItems(articleModel[position])
         binding.favorite.setOnClickListener {
-            listener(it,holder.adapterPosition,articleModel[holder.adapterPosition])
-//            articleModel[position].isFavorite = true
-//            var model = ArrayList<Article>()
-//            model = articleModel as ArrayList<Article>
-//            articleDao?.insertAll(
-//                model
-//            )
-
+            var isFav = false
+            isFav = binding.favorite.drawable == ContextCompat.getDrawable(mcontext,R.drawable.ic_favorite_red_700_24dp)
+            listener(it,holder.adapterPosition, articleModel[holder.adapterPosition], isFav)
         }
     }
 

@@ -34,13 +34,18 @@ class HomeActivity : AppCompatActivity(){
         val linearLayoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = linearLayoutManager
 
-//        viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
         showProgressbar()
         callObserver()
 
         binding.swipeContainer.setOnRefreshListener {
             Constants.isForceRefresh = true
+
+            viewModel.forceDataRefresh()
+            adapter.notifyDataSetChanged()
             callObserver()
+            binding.swipeContainer.isRefreshing = false
+
         }
 
     }
@@ -52,16 +57,21 @@ class HomeActivity : AppCompatActivity(){
             adapter = HomeViewAdapter(
                 this@HomeActivity,
                 article!!
-            ) { view: View, i: Int, article: Article ->
-                article.isFavorite=true
-                viewModel.markFavorite(article)
-
+            ) { view: View, i: Int, article: Article, isFav: Boolean ->
+                if (isFav) {
+                    article.isFavorite = true
+                    viewModel.markFavorite(article)
+                }else{
+                    article.isFavorite = false
+                    viewModel.markFavorite(article)
+                }
                 //update recycler adapter item at position
                  adapter.notifyItemChanged(i,article)
             }
             binding.recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
             Log.d("Articles", article.toString())
-            binding.swipeContainer.isRefreshing = false
+
             hideProgressbar()
         })
     }
