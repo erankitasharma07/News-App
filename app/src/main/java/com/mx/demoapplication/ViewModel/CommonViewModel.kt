@@ -24,5 +24,9 @@ class CommonViewModel internal constructor() : ViewModel(){
         userRepository.forceRefreshed()
     }
 
+    fun getAllFavorite(){
+        userRepository.getFavoriteData()
+    }
+
 //    val article : LiveData<Response.Article> = userRepository.getDataArticles()
 }

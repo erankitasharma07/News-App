@@ -10,16 +10,18 @@ import com.mx.demoapplication.utils.Constants
 import retrofit2.Call
 import java.util.*
 import java.util.concurrent.Executor
+import kotlin.collections.ArrayList
 
 
 class DataRepository constructor(private var webservice: WebServices,
                                  val articleDao: ArticleDao,
                                  private val executor: Executor)
 {
+    val data = MutableLiveData<ArticleModel>()
+    lateinit var articles : List<Article>
     fun getNewsArticles(): LiveData<ArticleModel> {
-        val data = MutableLiveData<ArticleModel>()
         executor.execute {
-                val articles = articleDao.getAll()
+                articles = articleDao.getAll()
                 if (!articles.isNullOrEmpty()) {
                     val articleModel = ArticleModel(articles = articles)
                     data.postValue(articleModel)
@@ -60,7 +62,7 @@ class DataRepository constructor(private var webservice: WebServices,
    }
 
     fun forceRefreshed() : LiveData<ArticleModel>{
-        val data = MutableLiveData<ArticleModel>()
+//        val data = MutableLiveData<ArticleModel>()
         executor.execute {
             webservice.getArticle(Constants.countryCode, Constants.api_key)
                 .enqueue(object : retrofit2.Callback<ArticleModel> {
@@ -70,8 +72,14 @@ class DataRepository constructor(private var webservice: WebServices,
                     ) {
                         val article = response.body()
                         data.postValue(article)
-                        executor.execute {
-                            articleDao.updateAll(article?.articles!!)
+
+
+                            executor.execute {
+                                articles = articleDao.getAll()
+                                if (article?.articles?.get(0)?.title != articles[0].title) {
+                                    Log.d("ArticleMatch","Not Matched")
+                                articleDao.updateAll(article?.articles!!)
+                            }
                         }
                     }
 
@@ -83,4 +91,22 @@ class DataRepository constructor(private var webservice: WebServices,
         }
         return data
     }
+
+    fun getFavoriteData():LiveData<ArticleModel>{
+        executor.execute {
+            val favArticles = ArrayList<Article>()
+            var i = 0
+            while (i < articles.size) {
+                if (articles[i].isFavorite) {
+                    favArticles.add(articles[i])
+                }
+                i++
+            }
+            val articleModel = ArticleModel(articles = favArticles)
+            data.postValue(articleModel)
+        }
+        return data
+    }
+
+
 }

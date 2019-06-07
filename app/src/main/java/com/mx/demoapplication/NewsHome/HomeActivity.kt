@@ -9,6 +9,8 @@ import android.provider.SyncStateContract
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.mx.demoapplication.Data.Article
@@ -44,10 +46,8 @@ class HomeActivity : AppCompatActivity(){
             viewModel.forceDataRefresh()
             adapter.notifyDataSetChanged()
             callObserver()
-            binding.swipeContainer.isRefreshing = false
 
         }
-
     }
     fun callObserver(){
         viewModel = ViewModelProviders.of(this).get(CommonViewModel::class.java)
@@ -70,14 +70,13 @@ class HomeActivity : AppCompatActivity(){
             }
             binding.recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
+            binding.swipeContainer.isRefreshing = false
             Log.d("Articles", article.toString())
 
             hideProgressbar()
         })
     }
-    fun showToast(msg: String, context: Context){
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-    }
+
     fun showProgressbar(){
         binding.progressbar.visibility = View.VISIBLE
     }
@@ -86,4 +85,19 @@ class HomeActivity : AppCompatActivity(){
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.favorite_menu, menu)
+        return true
+
+    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.favorite -> {
+                viewModel.getAllFavorite()
+                callObserver()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

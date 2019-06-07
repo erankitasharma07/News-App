@@ -15,13 +15,14 @@ data class ArticleModel(
 @Entity
 data class Article (
     @PrimaryKey
-    var pid: String = UUID.randomUUID().toString(),
+    var title: String="",
+//    var pid: String = "",
     var author: String?= null,
     var content: String?=null,
     var description: String="",
     var publishedAt: String?=null,
     @Embedded(prefix = "source") var source: Source= Source(),
-    var title: String="",
+
     var url: String?=null,
     var urlToImage: String?=null,
     var isFavorite:Boolean = false

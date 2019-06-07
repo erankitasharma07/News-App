@@ -27,9 +27,13 @@ class HomeViewAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bindItems(articleModel[position])
         binding.favorite.setOnClickListener {
-            var isFav = false
-            isFav = binding.favorite.drawable == ContextCompat.getDrawable(mcontext,R.drawable.ic_favorite_red_700_24dp)
-            listener(it,holder.adapterPosition, articleModel[holder.adapterPosition], isFav)
+            if (!articleModel[position].isFavorite){
+                listener(it,holder.adapterPosition, articleModel[holder.adapterPosition], true)
+            }else{
+                listener(it,holder.adapterPosition, articleModel[holder.adapterPosition], false)
+            }
+
+
         }
     }
 
@@ -49,7 +53,6 @@ class HomeViewAdapter(
             binding.title.text = article.title
             Picasso.get()
                 .load(article.urlToImage)
-                .fit()
                 .into(binding.imageView)
             mcontext = c
 
