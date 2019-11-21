@@ -33,7 +33,6 @@ class HomeViewAdapter(
                 listener(it,holder.adapterPosition, articleModel[holder.adapterPosition], false)
             }
 
-
         }
     }
 

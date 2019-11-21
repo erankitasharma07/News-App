@@ -1,6 +1,5 @@
 package com.mx.demoapplication.Data.source.Local
 
-import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.mx.demoapplication.Data.Article
 

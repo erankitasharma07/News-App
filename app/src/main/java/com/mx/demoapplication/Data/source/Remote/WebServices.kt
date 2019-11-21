@@ -8,5 +8,6 @@ import retrofit2.http.Query
 
 interface WebServices {
     @GET("top-headlines")
-    fun getArticle(@Query("country") country: String ,@Query("apiKey") apiKey: String): Call<ArticleModel>
+    fun getArticle(@Query("country") country: String ,@Query("apiKey") apiKey: String):
+            Call<ArticleModel>
 }
